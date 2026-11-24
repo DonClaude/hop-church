@@ -7,6 +7,7 @@ export default {
         sans: ['"Hanken Grotesk Variable"', "system-ui", "sans-serif"],
         serif: ['"Newsreader Variable"', "Georgia", "serif"],
         display: ['"Archivo Variable"', '"Hanken Grotesk Variable"', "sans-serif"],
+        modern: ['"Geist Variable"', '"Hanken Grotesk Variable"', "system-ui", "sans-serif"],
       },
       colors: {
         brand: { DEFAULT: "#AC0C2F", dark: "#8A0A26" },

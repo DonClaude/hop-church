@@ -44,7 +44,7 @@ export default function HeroVideo() {
         <button
           onClick={toggle}
           aria-label={playing ? "Pause background video" : "Play background video"}
-          className="absolute z-20 right-5 sm:right-8 lg:right-12 top-[88px] w-11 h-11 flex items-center justify-center border border-white/40 text-white bg-black/20 hover:bg-white hover:text-ink transition-colors"
+          className="absolute z-20 right-5 sm:right-8 lg:right-[max(3rem,calc((100vw-1400px)/2+3rem))] bottom-14 sm:bottom-16 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white transition-colors"
         >
           {playing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
         </button>

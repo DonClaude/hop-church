@@ -6,6 +6,7 @@ import "@fontsource-variable/newsreader/opsz.css";
 import "@fontsource-variable/newsreader/opsz-italic.css";
 import "@fontsource-variable/hanken-grotesk/wght.css";
 import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource-variable/geist";
 import App from "./App";
 import "./index.css";
 

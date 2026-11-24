@@ -1,8 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, ArrowRight, ArrowUpRight } from "lucide-react";
-import { church, nav, LOGO_URL } from "../data/church";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { church, LOGO_URL } from "../data/church";
+
+const menu = [
+  { label: "I'm new", to: "/plan-your-visit", red: true },
+  { label: "About", to: "/about" },
+  { label: "Messages", to: "/watch" },
+  { label: "Ministries", to: "/ministries" },
+  { label: "Events", to: "/events" },
+  { label: "Give", to: "/give" },
+  { label: "Contact", to: "/contact" },
+];
+
+// Emblem + "HOUSE OF PRAYER / CHURCH", set like the HOP Worship wordmark.
+function Logo({ light = false, onClick }) {
+  return (
+    <Link to="/" onClick={onClick} className="flex items-center gap-3.5 flex-shrink-0" aria-label="House of Prayer Church, home">
+      <img src={LOGO_URL} alt="" className="w-11 h-11 sm:w-[50px] sm:h-[50px] object-contain" />
+      <span className="leading-none flex flex-col gap-[5px]">
+        <span className="headline text-[21px] sm:text-[24px] tracking-[0.01em]">House of Prayer</span>
+        <span className={`font-sans text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] ${light ? "text-white/80" : "text-oxblood"}`}>Church</span>
+      </span>
+    </Link>
+  );
+}
 
 export default function Layout({ children }) {
   const { pathname } = useLocation();
@@ -22,9 +45,27 @@ export default function Layout({ children }) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const overPhoto = isHome && !scrolled && !open;
+  const openBtn = useRef(null);
+  const closeBtn = useRef(null);
+
+  // While the menu is open: no page scroll behind it, Escape closes it, focus goes to the close button.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const t = setTimeout(() => closeBtn.current?.focus(), 50);
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      clearTimeout(t);
+      window.removeEventListener("keydown", onKey);
+      openBtn.current?.focus({ preventScroll: true });
+    };
+  }, [open]);
+
+  const overPhoto = isHome && !scrolled;
   const isActive = (to) => pathname === to;
-  const links = nav.filter((n) => n.to !== "/plan-your-visit");
 
   return (
     <div className="min-h-screen bg-white text-ink font-sans">
@@ -34,43 +75,23 @@ export default function Layout({ children }) {
 
       <header
         className={`fixed top-0 inset-x-0 z-50 transition-[background-color,color,border-color] duration-300 border-b ${
-          overPhoto ? "bg-transparent text-white border-white/15" : "bg-white text-ink border-ink/10"
+          overPhoto ? "bg-transparent text-white border-transparent" : "bg-white text-ink border-ink/10"
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between h-[72px]">
-            <Link to="/" className="flex items-center gap-3 flex-shrink-0" aria-label="House of Prayer Church, home">
-              <img src={LOGO_URL} alt="" className="w-10 h-10 object-contain" />
-              <span className="leading-none">
-                <span className="headline block text-[21px] tracking-[0.01em]">House of Prayer</span>
-                <span className={`block text-[10px] font-bold uppercase tracking-[0.24em] mt-1 ${overPhoto ? "text-white/70" : "text-oxblood"}`}>Church</span>
-              </span>
-            </Link>
-
-            <nav className="hidden lg:flex items-center gap-8" aria-label="Main">
-              {links.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  aria-current={isActive(item.to) ? "page" : undefined}
-                  className={`relative text-[13px] font-bold uppercase tracking-[0.1em] py-1 transition-opacity ${isActive(item.to) ? "opacity-100" : "opacity-70 hover:opacity-100"}`}
-                >
-                  {item.label}
-                  {isActive(item.to) && <motion.span layoutId="nav-rule" className="absolute -bottom-1 left-0 right-0 h-[2px] bg-oxblood" />}
-                </Link>
-              ))}
-              <Link to="/plan-your-visit" className="inline-flex items-center gap-2 bg-oxblood hover:bg-oxblood-deep text-white text-[13px] font-bold uppercase tracking-[0.1em] px-5 py-3 transition-colors">
-                Plan your visit <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </nav>
-
+          <div className="flex items-center justify-between h-[84px]">
+            <Logo light={overPhoto} />
             <button
-              onClick={() => setOpen(!open)}
-              className="lg:hidden -mr-2 w-11 h-11 flex items-center justify-center"
-              aria-label={open ? "Close menu" : "Open menu"}
+              ref={openBtn}
+              onClick={() => setOpen(true)}
+              className="-mr-2 w-12 h-12 flex items-center justify-center"
+              aria-label="Open menu"
               aria-expanded={open}
+              aria-controls="site-menu"
             >
-              {open ? <X className="w-7 h-7" strokeWidth={1.75} /> : <Menu className="w-7 h-7" strokeWidth={1.75} />}
+              <svg aria-hidden="true" width="30" height="18" viewBox="0 0 30 18" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M0 1h30M0 9h30M0 17h30" />
+              </svg>
             </button>
           </div>
         </div>
@@ -79,22 +100,49 @@ export default function Layout({ children }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="lg:hidden fixed inset-x-0 top-[72px] bottom-0 z-40 bg-white overflow-y-auto"
+            id="site-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+            initial={{ y: "-100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-100%" }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[70] bg-white text-ink flex flex-col overflow-y-auto font-modern"
           >
-            <nav className="px-5 sm:px-8 pt-4 pb-10 flex flex-col min-h-full" aria-label="Mobile">
-              {[{ label: "Home", to: "/" }, ...links].map((item) => (
-                <Link key={item.to} to={item.to} className="py-3 border-b border-ink/10">
-                  <span className={`headline text-[44px] ${isActive(item.to) ? "text-oxblood" : "text-ink"}`}>{item.label}</span>
-                </Link>
+            <div className="w-full max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-[84px] flex-shrink-0">
+              <Logo onClick={() => setOpen(false)} />
+              <button ref={closeBtn} onClick={() => setOpen(false)} className="-mr-2 w-12 h-12 flex items-center justify-center" aria-label="Close menu">
+                <svg aria-hidden="true" width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 2l16 16M18 2L2 18" /></svg>
+              </button>
+            </div>
+            <nav className="flex-1 w-full max-w-[1400px] mx-auto flex flex-col justify-center px-5 sm:px-8 lg:px-12 py-6" aria-label="Main">
+              {menu.map((item, i) => (
+                <motion.div
+                  key={item.to}
+                  initial={{ opacity: 0, y: -24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                  transition={{ duration: 0.6, delay: 0.18 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Link
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    aria-current={isActive(item.to) ? "page" : undefined}
+                    className={`inline-block font-bold leading-[1.02] tracking-[-0.05em] text-[clamp(40px,min(7.5vw,8.6vh),112px)] transition-colors ${
+                      item.red || isActive(item.to) ? "text-oxblood" : "text-ink hover:text-oxblood"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
               ))}
-              <Link to="/plan-your-visit" className="btn-red mt-8">
-                Plan your visit <ArrowRight className="w-4 h-4" />
-              </Link>
             </nav>
+            <div className="border-t border-ink/10"><div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 py-6 flex flex-wrap justify-between gap-x-8 gap-y-3 font-sans font-bold uppercase tracking-[0.3em] text-[11px] sm:text-[12px] text-stone-600">
+              <span>Sundays 9:00 + 11:15 AM</span>
+              <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-ink">1245 Thomaston Avenue, Waterbury</a>
+              <a href={church.phoneHref} className="hover:text-ink">{church.phone}</a>
+            </div></div>
           </motion.div>
         )}
       </AnimatePresence>

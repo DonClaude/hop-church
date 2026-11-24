@@ -20,39 +20,37 @@ export default function Home() {
   return (
     <div className="bg-white text-ink">
       {/* ── Hero ── */}
-      <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-ink-night text-white">
+      <section className="relative min-h-[640px] h-[100svh] max-h-[1100px] flex flex-col overflow-hidden bg-ink-night text-white">
         <HeroVideo />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-black/50" />
 
-        <Container className="relative w-full pt-40 pb-10 md:pb-14">
-          <h1 className="headline text-[64px] min-[400px]:text-[72px] sm:text-[116px] lg:text-[min(160px,17vh)] xl:text-[min(184px,19vh)] leading-[0.84] [font-stretch:62%]">
-            <MaskLine delay={0.1}>
-              <span className="block font-sans font-bold tracking-[0.3em] [font-stretch:100%] leading-none mb-[0.18em] text-[15px] sm:text-[18px] lg:text-[20px]">
-                House of Prayer · Waterbury
-              </span>
-            </MaskLine>
-            <MaskLine delay={0.2}>A church for</MaskLine>
-            <MaskLine delay={0.3}>all <span className="text-oxblood">nations</span></MaskLine>
-          </h1>
-
-          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.55, ease: EASE }}
-            className="mt-3 accent text-[34px] sm:text-[46px] lg:text-[54px] leading-none text-white">
-            Stronger together.
+        <div className="relative flex-1 flex flex-col items-center justify-center text-center px-5 pt-[84px]">
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
+            className="font-sans font-bold uppercase tracking-[0.3em] text-[11px] sm:text-[13px] text-white/90">
+            Waterbury, Connecticut
           </motion.p>
+          <h1 className="mt-5 sm:mt-6 font-modern font-semibold tracking-[-0.05em] leading-[0.92] text-[64px] sm:text-[104px] lg:text-[clamp(104px,10.5vw,168px)]">
+            <MaskLine delay={0.2}>Welcome home.</MaskLine>
+          </h1>
+          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5, ease: EASE }}
+            className="mt-6 sm:mt-8 max-w-[1000px] font-sans font-bold uppercase tracking-[0.3em] leading-[1.7] text-[12px] sm:text-[14px] lg:text-[clamp(14px,1.3vw,19px)]">
+            A church for all nations, going to all the nations.
+          </motion.p>
+          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.7, ease: EASE }}
+            className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-3">
+            <Link to="/plan-your-visit" className="btn-red">Plan your visit</Link>
+            <Link to="/watch" className="btn-ghost-light bg-white/10">Watch online</Link>
+          </motion.div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.9, ease: EASE }}
+            className="mt-7 font-sans font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[12px] lg:text-[13px] text-white/70">
+            Join us Sundays at 9:00 and 11:15 AM
+          </motion.p>
+        </div>
 
-          <div className="mt-6 md:mt-8 grid lg:grid-cols-12 gap-8 items-end">
-            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.75, ease: EASE }}
-              className="lg:col-span-6 text-[16px] md:text-[18px] leading-[1.55] text-white/85 max-w-[36rem]">
-              Join us Sundays at 9:00 and 11:15 AM on Thomaston Avenue. Whoever you are and wherever you're from, there's a seat for you.
-            </motion.p>
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.95, ease: EASE }}
-              className="lg:col-span-6 flex flex-wrap gap-3 lg:justify-end">
-              <Link to="/plan-your-visit" className="btn-red">Plan your visit <ArrowRight className="w-4 h-4" /></Link>
-              <Link to="/watch" className="btn-ghost-light">Watch online</Link>
-            </motion.div>
-          </div>
-        </Container>
+        <div className="relative w-full max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 pb-6 sm:pb-8 flex flex-wrap justify-between gap-x-6 gap-y-2 font-sans font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[12px] text-white/80">
+          <span>Sundays 9:00 + 11:15 AM</span>
+          <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white">1245 Thomaston Avenue</a>
+        </div>
       </section>
 
       {/* ── Sunday times ── */}
