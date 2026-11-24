@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { church, coreValues, ministries, events } from "../data/church";
 import { Container, EASE, MaskLine, PhotoSlot, rise } from "../components/ui";
 import { formatDate } from "../lib/dates";
+import HeroVideo from "../components/HeroVideo";
 
 const firstSunday = [
   { step: "Arrive", text: "Park in the church lot and come in through the main entrance at 1245 Thomaston Avenue." },
@@ -20,8 +21,8 @@ export default function Home() {
     <div className="bg-white text-ink">
       {/* ── Hero ── */}
       <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-ink-night text-white">
-        <PhotoSlot label="Sunday worship, wide shot of the congregation" dark className="absolute inset-0" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/45" />
+        <HeroVideo />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/50" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
 
         <Container className="relative w-full pt-40 pb-10 md:pb-14">
