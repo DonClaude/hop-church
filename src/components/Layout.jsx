@@ -37,7 +37,7 @@ export default function Layout({ children }) {
               <img src={LOGO_URL} alt="" className="w-11 h-11 object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105" />
               <div className="flex flex-col justify-center">
                 <span className="text-sm font-bold tracking-tight text-slate-900 leading-none">House of Prayer</span>
-                <span className="text-[10px] font-medium text-slate-400 tracking-widest uppercase mt-1">Waterbury, CT</span>
+                <span className="text-[10px] font-medium text-slate-500 tracking-widest uppercase mt-1">Waterbury, CT</span>
               </div>
             </Link>
 
@@ -65,7 +65,7 @@ export default function Layout({ children }) {
 
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
               aria-expanded={open}
               aria-label={open ? "Close menu" : "Open menu"}
             >
@@ -119,7 +119,7 @@ export default function Layout({ children }) {
             <p className="text-slate-400 text-sm italic leading-relaxed max-w-sm">
               "My house shall be called a house of prayer for all nations."
             </p>
-            <p className="text-slate-600 text-xs tracking-widest uppercase mt-2">Mark 11:17</p>
+            <p className="text-slate-400 text-xs tracking-widest uppercase mt-2">Mark 11:17</p>
             <div className="flex gap-3 mt-8">
               {[
                 { href: church.social.youtube, icon: Youtube, label: "YouTube" },
@@ -127,7 +127,7 @@ export default function Layout({ children }) {
                 { href: church.social.instagram, icon: Instagram, label: "Instagram" },
               ].map(({ href, icon: Icon, label }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/40 transition-colors">
+                  className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/40 transition-colors">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
@@ -144,15 +144,15 @@ export default function Layout({ children }) {
           </div>
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] text-rose-400 mb-5">CHURCH OFFICE</p>
-            <p className="text-sm text-slate-300 mb-2"><a href={church.phoneHref} className="hover:text-white">{church.phone}</a></p>
-            <p className="text-sm text-slate-300 mb-2 break-all"><a href={`mailto:${church.email}`} className="hover:text-white">{church.email}</a></p>
+            <p className="text-sm text-slate-300"><a href={church.phoneHref} className="inline-flex items-center min-h-[44px] hover:text-white">{church.phone}</a></p>
+            <p className="text-sm text-slate-300 break-all"><a href={`mailto:${church.email}`} className="inline-flex items-center min-h-[44px] hover:text-white">{church.email}</a></p>
             <p className="text-sm text-slate-400 mt-4">{church.officeHours}</p>
           </div>
         </div>
         <div className="border-t border-slate-800">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col sm:flex-row gap-3 justify-between text-xs text-slate-600">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col sm:flex-row gap-3 justify-between text-xs text-slate-400">
             <p>&copy; {new Date().getFullYear()} {church.name}. An {church.denomination} church.</p>
-            <a href={church.worshipSite} target="_blank" rel="noopener noreferrer" className="hover:text-slate-300">HOP Worship Team ↗</a>
+            <a href={church.worshipSite} target="_blank" rel="noopener noreferrer" className="inline-flex items-center min-h-[44px] hover:text-slate-300">HOP Worship Team</a>
           </div>
         </div>
       </footer>

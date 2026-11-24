@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Phone, Mail, Clock, MapPin } from "lucide-react";
 import { church, buildings } from "../data/church";
-import { Button, Eyebrow, PageHero, SectionHeading, fadeUp } from "../components/ui";
+import { Button, PageHero } from "../components/ui";
 import { sendForm } from "../lib/forms";
 
 function ContactForm() {
@@ -30,7 +28,7 @@ function ContactForm() {
   if (status === "sent" || status === "email") {
     return (
       <div className="text-center py-12">
-        <p className="text-2xl font-bold tracking-tight mb-3">{status === "sent" ? "Thank you" : "Almost done"}</p>
+        <p className="text-2xl font-bold tracking-tight mb-3">{status === "sent" ? "Thank you" : "One more step"}</p>
         <p className="text-slate-500 max-w-sm mx-auto">
           {status === "sent" ? "Your message is on its way. We'll get back to you soon." : "Your email app opened with your message filled in. Just press send."}
         </p>
@@ -59,55 +57,52 @@ function ContactForm() {
 export default function Contact() {
   return (
     <>
-      <PageHero eyebrow="Contact us" title="We'd love to hear from you." text="Questions, prayer requests or just saying hello, reach out any time." photo="Church office front desk" />
+      <PageHero
+        title="Contact the church office"
+        text={`Call ${church.phone} or email ${church.email}. The office is open ${church.officeHours.replace("Tuesday to Thursday", "Tuesday to Thursday,")}.`}
+        photo="Church office front desk"
+      />
 
       <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-16">
-          <motion.div {...fadeUp()} className="lg:col-span-2 space-y-8">
-            <div>
-              <Eyebrow>Church office</Eyebrow>
-              <h2 className="text-3xl font-bold tracking-tighter mb-8">Get in touch</h2>
-            </div>
-            {[
-              { icon: Phone, label: "Phone", value: church.phone, href: church.phoneHref },
-              { icon: Mail, label: "Email", value: church.email, href: `mailto:${church.email}` },
-              { icon: Clock, label: "Office hours", value: church.officeHours },
-              { icon: MapPin, label: "Sunday services", value: `${church.mainAddress.line1}, ${church.mainAddress.line2}`, href: church.mapsUrl },
-            ].map(({ icon: Icon, label, value, href }) => (
-              <div key={label} className="flex gap-5">
-                <span className="w-11 h-11 shrink-0 rounded-full bg-brand/[0.08] text-brand flex items-center justify-center"><Icon className="w-5 h-5" /></span>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-1">{label}</p>
-                  {href
-                    ? <a href={href} {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="font-semibold hover:text-brand break-words">{value}</a>
-                    : <p className="font-semibold">{value}</p>}
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12 lg:gap-16">
+          <div className="lg:col-span-4">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-10">Office details</h2>
+            <dl className="border-t border-slate-200">
+              {[
+                { label: "Phone", value: church.phone, href: church.phoneHref },
+                { label: "Email", value: church.email, href: `mailto:${church.email}` },
+                { label: "Office hours", value: church.officeHours },
+                { label: "Mailing address", value: "1263 Thomaston Avenue, Waterbury, CT 06704" },
+              ].map(({ label, value, href }) => (
+                <div key={label} className="py-5 border-b border-slate-200">
+                  <dt className="text-sm text-slate-500 mb-1">{label}</dt>
+                  <dd>{href ? <a href={href} className="font-semibold break-words underline decoration-slate-300 underline-offset-4 hover:decoration-brand">{value}</a> : <span className="font-semibold">{value}</span>}</dd>
                 </div>
-              </div>
-            ))}
-          </motion.div>
-          <motion.div {...fadeUp(0.1)} className="lg:col-span-3 rounded-2xl border border-slate-100 shadow-lg p-8 md:p-10">
-            <h2 className="text-2xl font-bold tracking-tight mb-6">Send us a message</h2>
+              ))}
+            </dl>
+          </div>
+          <div className="lg:col-span-8 rounded-2xl border border-slate-200 p-8 md:p-10">
+            <h3 className="text-2xl font-bold tracking-tight mb-6">Send a message or prayer request</h3>
             <ContactForm />
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-32 bg-slate-50/70 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionHeading eyebrow="Our campus" title="Which building is which" text="Our ministries meet in a few buildings along Thomaston Avenue." />
-          <div className="grid lg:grid-cols-2 gap-10">
-            <div className="divide-y divide-slate-200 border-y border-slate-200 bg-white rounded-2xl px-7">
+      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-5">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-8">Buildings on Thomaston Avenue</h2>
+            <div className="border-t border-slate-200">
               {buildings.map((b) => (
-                <div key={b.name} className="py-5">
+                <div key={b.name} className="py-5 border-b border-slate-200">
                   <p className="font-bold tracking-tight">{b.name}</p>
-                  <p className="text-sm text-slate-700">{b.address}</p>
-                  <p className="text-sm text-slate-500">{b.use}</p>
+                  <p className="text-slate-600">{b.address}. {b.use}.</p>
                 </div>
               ))}
             </div>
-            <div className="rounded-2xl overflow-hidden border border-slate-100 shadow-lg min-h-[360px]">
-              <iframe title="Map to House of Prayer Church" src={church.mapEmbed} className="w-full h-full min-h-[360px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-            </div>
+          </div>
+          <div className="lg:col-span-7 rounded-2xl overflow-hidden border border-slate-200 min-h-[420px]">
+            <iframe title="Map to House of Prayer Church" src={church.mapEmbed} className="w-full h-full min-h-[420px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
           </div>
         </div>
       </section>

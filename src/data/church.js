@@ -36,7 +36,7 @@ export const church = {
 
 export const buildings = [
   { name: "Main Church", address: "1245 Thomaston Avenue", use: "Sunday services" },
-  { name: "Church Office (mailing)", address: "1263 Thomaston Avenue", use: "Mailing address: Waterbury, CT 06704" },
+  { name: "Church office", address: "1263 Thomaston Avenue", use: "Mailing address" },
   { name: "Lighthouse Childcare", address: "1333 Thomaston Avenue, front building", use: "Weekday childcare" },
   { name: "Bread of Life Food Pantry", address: "1333 Thomaston Avenue, front building", use: "Free groceries for families" },
   { name: "Family Life Center", address: "1333 Thomaston Avenue, rear building", use: "Events and gatherings" },
@@ -56,7 +56,7 @@ export const beliefs = [
   { title: "Scripture", text: "The Bible is inspired by God and is our final authority." },
   { title: "God", text: "There is one God, eternally existing as Father, Son and Holy Spirit." },
   { title: "Jesus", text: "Jesus is fully God and fully human, and through Him we are restored to God." },
-  { title: "The Holy Spirit", text: "The baptism in the Holy Spirit empowers believers to live and witness for Christ." },
+  { title: "The Holy Spirit", text: "The baptism in the Holy Spirit gives believers power to live and witness for Christ." },
   { title: "The Church", text: "The Church is the Body of Christ, made up of everyone who has trusted in Him." },
   { title: "Healing and hope", text: "God still heals today, and Jesus will return for His people." },
 ];

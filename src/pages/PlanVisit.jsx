@@ -1,18 +1,15 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Car, DoorOpen, Baby, Clock, MapPin, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { church } from "../data/church";
-import { Button, Eyebrow, PageHero, PhotoSlot, SectionHeading, fadeUp } from "../components/ui";
+import { Button, PageHero, PhotoSlot } from "../components/ui";
 import { sendForm } from "../lib/forms";
 
 const faqs = [
-  { q: "What should I wear?", a: "Whatever you're comfortable in. You'll see everything from suits to jeans on a Sunday morning." },
-  { q: "How long is the service?", a: "Plan for about [90 minutes] of worship, a message from the Bible, and prayer." },
-  { q: "Is there something for my kids?", a: "Yes. [Describe children's ministry: ages, where to check in, and what kids do during the service.]" },
-  { q: "Can I watch online first?", a: "Absolutely. Our 9:00 AM service streams live every Sunday on YouTube and Facebook." },
-  { q: "Do I have to give or sign anything?", a: "No. As our guest, you're simply welcome to worship with us. There's nothing you need to do or bring." },
-  { q: "What if I need prayer?", a: "Our prayer team is available after every service, and you can send a prayer request any time." },
+  { q: "What should I wear?", a: "Whatever you're comfortable in. Some people wear suits and others wear jeans." },
+  { q: "Can I watch online first?", a: "Yes. The 9:00 AM service streams live every Sunday on YouTube and Facebook." },
+  { q: "Do I have to give or sign anything?", a: "No. Guests are welcome to worship with us without giving or filling anything in." },
+  { q: "What if I need prayer?", a: "Members of the prayer team are available after every service, and you can send a prayer request from the contact page any time." },
 ];
 
 function nextSundays(n = 6) {
@@ -62,7 +59,7 @@ function VisitForm() {
   if (status === "email") {
     return (
       <div className="text-center py-10">
-        <p className="text-2xl font-bold tracking-tight mb-3">Almost done</p>
+        <p className="text-2xl font-bold tracking-tight mb-3">One more step</p>
         <p className="text-slate-500 max-w-sm mx-auto">Your email app opened with your details filled in. Just press send, and we'll be ready to welcome you.</p>
       </div>
     );
@@ -87,7 +84,7 @@ function VisitForm() {
       {error && <p className="sm:col-span-2 text-sm text-brand" role="alert">{error}</p>}
       <div className="sm:col-span-2">
         <Button type="submit" arrow disabled={status === "sending"} className="w-full sm:w-auto disabled:opacity-60">
-          {status === "sending" ? "Sending…" : "Let us know you're coming"}
+          {status === "sending" ? "Sending…" : "Send my visit plan"}
         </Button>
       </div>
     </form>
@@ -99,72 +96,45 @@ export default function PlanVisit() {
   return (
     <>
       <PageHero
-        eyebrow="Plan your visit"
-        title="We saved you a seat."
-        text="Everything you need to know before your first Sunday at House of Prayer, from where to park to what your kids will do."
+        title="Plan your first visit"
+        text="Sundays at 9:00 and 11:00 AM in the main church at 1245 Thomaston Avenue, Waterbury."
         photo="Smiling greeter at the front entrance"
       />
 
-      {/* Service times + location */}
       <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-start">
-          <motion.div {...fadeUp()}>
-            <Eyebrow>When and where</Eyebrow>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-10">Join us any Sunday.</h2>
-            <div className="divide-y divide-slate-100 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <div>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-10">Service times and parking</h2>
+            <dl className="divide-y divide-slate-200 border-y border-slate-200">
               {church.services.map((s) => (
-                <div key={s.time} className="py-6 flex items-center justify-between gap-6">
-                  <div>
-                    <p className="font-bold text-lg tracking-tight">{s.name}</p>
-                    {s.note && <p className="text-sm text-slate-500">{s.note}</p>}
-                  </div>
-                  <p className="text-2xl font-bold tracking-tight text-brand flex items-center gap-2"><Clock className="w-5 h-5" />{s.time}</p>
+                <div key={s.time} className="py-5 flex items-baseline justify-between gap-6">
+                  <dt className="text-slate-600">{s.name}{s.note ? ` (${s.note.toLowerCase()})` : ""}</dt>
+                  <dd className="text-2xl font-bold tracking-tight">{s.time}</dd>
                 </div>
               ))}
-              <div className="py-6 flex items-start gap-4">
-                <MapPin className="w-5 h-5 text-brand mt-1 shrink-0" />
-                <div>
-                  <p className="font-bold text-lg tracking-tight">{church.mainAddress.line1}</p>
-                  <p className="text-slate-500">{church.mainAddress.line2}</p>
-                  <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-sm font-semibold hover:text-brand">Get directions →</a>
-                </div>
+              <div className="py-5 flex items-baseline justify-between gap-6">
+                <dt className="text-slate-600">Address</dt>
+                <dd className="text-right font-semibold">{church.mainAddress.line1}<span className="block text-sm font-normal text-slate-500">{church.mainAddress.line2}</span></dd>
               </div>
-            </div>
-          </motion.div>
-          <motion.div {...fadeUp(0.1)} className="rounded-2xl overflow-hidden border border-slate-100 shadow-lg aspect-[4/3]">
+            </dl>
+            <p className="mt-8 text-slate-600 leading-relaxed max-w-lg">
+              Park in the church lot and come in through the main entrance, where greeters will help you find a seat.
+            </p>
+            <div className="mt-10"><Button href={church.mapsUrl} variant="outline">Get directions</Button></div>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-slate-200 aspect-[4/3]">
             <iframe title="Map to House of Prayer Church" src={church.mapEmbed} className="w-full h-full" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* What to expect */}
-      <section className="py-24 md:py-32 bg-slate-50/70 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionHeading eyebrow="What to expect" title="Your first Sunday, step by step" />
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { icon: Car, title: "Parking", text: "Free parking is available on site. [Confirm where guests should park and whether there are reserved guest spots.]" },
-              { icon: DoorOpen, title: "Which door", text: "Sunday services are in the main church at 1245 Thomaston Avenue. Greeters at the front entrance will help you find a seat." },
-              { icon: Baby, title: "Kids and youth", text: "[Describe children's check-in, age groups and youth activities during the service.]" },
-            ].map(({ icon: Icon, title, text }, i) => (
-              <motion.div key={title} {...fadeUp(i * 0.08)} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                <PhotoSlot label={title} className="aspect-[16/10]" />
-                <div className="p-7">
-                  <div className="w-10 h-10 rounded-full bg-brand/[0.08] text-brand flex items-center justify-center mb-4"><Icon className="w-5 h-5" /></div>
-                  <h3 className="font-bold text-lg tracking-tight mb-2">{title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{text}</p>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <SectionHeading eyebrow="Questions" title="Common questions" />
-          <div className="divide-y divide-slate-200 border-y border-slate-200">
+      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12 lg:gap-16">
+          <div className="lg:col-span-4">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight">Questions guests ask</h2>
+            <PhotoSlot label="Families arriving for the service" className="hidden lg:block mt-10 rounded-2xl aspect-[4/5]" />
+          </div>
+          <div className="lg:col-span-8 divide-y divide-slate-200 border-y border-slate-200">
             {faqs.map((f, i) => {
               const open = openFaq === i;
               return (
@@ -172,12 +142,12 @@ export default function PlanVisit() {
                   <button
                     onClick={() => setOpenFaq(open ? -1 : i)}
                     aria-expanded={open}
-                    className="w-full flex items-center justify-between gap-6 py-6 text-left font-semibold tracking-tight hover:text-brand transition-colors"
+                    className="w-full min-h-[56px] flex items-center justify-between gap-6 py-5 text-left text-lg font-semibold tracking-tight hover:text-brand transition-colors"
                   >
                     {f.q}
                     <ChevronDown className={`w-5 h-5 shrink-0 transition-transform ${open ? "rotate-180 text-brand" : "text-slate-400"}`} />
                   </button>
-                  {open && <p className="pb-6 -mt-2 text-slate-500 leading-relaxed">{f.a}</p>}
+                  {open && <p className="pb-6 -mt-1 text-slate-600 leading-relaxed max-w-2xl">{f.a}</p>}
                 </div>
               );
             })}
@@ -185,14 +155,15 @@ export default function PlanVisit() {
         </div>
       </section>
 
-      {/* Form */}
-      <section id="visit-form" className="py-24 md:py-32 bg-slate-950 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(172,12,47,0.18)_0%,transparent_60%)]" />
-        <div className="relative max-w-3xl mx-auto px-6 lg:px-8">
-          <SectionHeading dark eyebrow="Let us know" title="Tell us you're coming" text="We'll have someone ready to welcome you, save you a seat and answer any questions." />
-          <motion.div {...fadeUp()} className="bg-white rounded-2xl p-8 md:p-10 shadow-2xl">
+      <section id="visit-form" className="py-24 md:py-32 bg-slate-950">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-tight mb-6">Tell us which Sunday you're coming</h2>
+            <p className="text-white/70 leading-relaxed">A greeter will look out for you at the door and save you a seat.</p>
+          </div>
+          <div className="lg:col-span-8 bg-white rounded-2xl p-8 md:p-10">
             <VisitForm />
-          </motion.div>
+          </div>
         </div>
       </section>
     </>
