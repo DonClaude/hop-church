@@ -1,8 +1,7 @@
 // Every fact the site shows lives here, so updates happen in one place.
 // Items marked "CONFIRM" are placeholders or best guesses for the church office to check.
 
-export const LOGO_URL =
-  "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/352eb567e_image.png";
+export const LOGO_URL = "/logo.png";
 
 export const church = {
   name: "House of Prayer Church",
@@ -19,7 +18,7 @@ export const church = {
   mapEmbed: "https://www.google.com/maps?q=1245+Thomaston+Avenue,+Waterbury,+CT+06704&output=embed",
   services: [
     { day: "Sunday", time: "9:00 AM", name: "First Service", note: "Also streamed live" },
-    { day: "Sunday", time: "11:00 AM", name: "Second Service" },
+    { day: "Sunday", time: "11:15 AM", name: "Second Service" },
   ],
   social: {
     youtube: "https://www.youtube.com/@houseofprayerchurch1263",
@@ -71,14 +70,14 @@ export const events = [
   {
     date: "2026-12-20",
     title: "Christmas Sunday",
-    time: "9:00 AM and 11:00 AM",
+    time: "9:00 AM and 11:15 AM",
     text: "Celebrate the birth of Jesus with us, featuring the HOP Choir.",
   },
 ];
 
 export const weekly = [
   { day: "Sunday", time: "9:00 AM", title: "First Service" },
-  { day: "Sunday", time: "11:00 AM", title: "Second Service" },
+  { day: "Sunday", time: "11:15 AM", title: "Second Service" },
 ];
 
 export const history = [

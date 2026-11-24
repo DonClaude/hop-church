@@ -1,184 +1,249 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { church, coreValues, ministries, events } from "../data/church";
-import { Button, PhotoSlot, SectionHeading } from "../components/ui";
+import { Container, EASE, MaskLine, PhotoSlot, rise } from "../components/ui";
 import { formatDate } from "../lib/dates";
+
+const firstSunday = [
+  { step: "Arrive", text: "Park in the church lot and come in through the main entrance at 1245 Thomaston Avenue." },
+  { step: "Worship", text: "The service opens with worship led by the HOP Worship Team." },
+  { step: "The Word", text: "A message from the Bible, taught by one of our pastors." },
+  { step: "Prayer", text: "The prayer team is at the front after every service if you'd like someone to pray with you." },
+];
 
 export default function Home() {
   const upcoming = events.filter((e) => new Date(e.date + "T23:59:59") >= new Date()).slice(0, 3);
   const highlights = ministries.filter((m) => ["Prayer", "Worship", "Alpha Ministries", "Bread of Life"].includes(m.name));
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative min-h-[calc(100svh-4rem)] flex items-end overflow-hidden bg-slate-950">
+    <div className="bg-white text-ink">
+      {/* ── Hero ── */}
+      <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-ink-night text-white">
         <PhotoSlot label="Sunday worship, wide shot of the congregation" dark className="absolute inset-0" />
-        <div className="absolute inset-0 bg-slate-950/55" />
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pb-20 md:pb-28">
-          <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }} className="max-w-4xl">
-            <h1 className="text-5xl sm:text-7xl lg:text-[5.5rem] font-bold text-white tracking-tighter leading-[1.02] mb-8">
-              A church for all nations in Waterbury
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 leading-relaxed mb-10 max-w-xl">
-              Sunday services at 9:00 and 11:00 AM on Thomaston Avenue. The 9:00 service also streams live.
-            </p>
-            <Button to="/plan-your-visit" arrow>Plan Your Visit</Button>
-          </motion.div>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
+
+        <Container className="relative w-full pt-40 pb-10 md:pb-14">
+          <h1 className="headline text-[64px] min-[400px]:text-[72px] sm:text-[116px] lg:text-[min(160px,17vh)] xl:text-[min(184px,19vh)] leading-[0.84] [font-stretch:62%]">
+            <MaskLine delay={0.1}>
+              <span className="block font-sans font-bold tracking-[0.3em] [font-stretch:100%] leading-none mb-[0.18em] text-[15px] sm:text-[18px] lg:text-[20px]">
+                House of Prayer · Waterbury
+              </span>
+            </MaskLine>
+            <MaskLine delay={0.2}>A church for</MaskLine>
+            <MaskLine delay={0.3}>all <span className="text-oxblood">nations</span></MaskLine>
+          </h1>
+
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.55, ease: EASE }}
+            className="mt-3 accent text-[34px] sm:text-[46px] lg:text-[54px] leading-none text-white">
+            Stronger together.
+          </motion.p>
+
+          <div className="mt-6 md:mt-8 grid lg:grid-cols-12 gap-8 items-end">
+            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.75, ease: EASE }}
+              className="lg:col-span-6 text-[16px] md:text-[18px] leading-[1.55] text-white/85 max-w-[36rem]">
+              Join us Sundays at 9:00 and 11:15 AM on Thomaston Avenue. Whoever you are and wherever you're from, there's a seat for you.
+            </motion.p>
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.95, ease: EASE }}
+              className="lg:col-span-6 flex flex-wrap gap-3 lg:justify-end">
+              <Link to="/plan-your-visit" className="btn-red">Plan your visit <ArrowRight className="w-4 h-4" /></Link>
+              <Link to="/watch" className="btn-ghost-light">Watch online</Link>
+            </motion.div>
+          </div>
+        </Container>
       </section>
 
-      {/* Visit block */}
-      <section className="py-24 md:py-32">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-10">Service times and directions</h2>
-            <dl className="divide-y divide-slate-200 border-y border-slate-200">
-              {church.services.map((s) => (
-                <div key={s.time} className="py-5 flex items-baseline justify-between gap-6">
-                  <dt className="text-slate-600">{s.day}, {s.name.toLowerCase()}</dt>
-                  <dd className="text-2xl font-bold tracking-tight">{s.time}</dd>
-                </div>
-              ))}
-              <div className="py-5 flex items-baseline justify-between gap-6">
-                <dt className="text-slate-600">Main church</dt>
-                <dd className="text-right">
-                  <span className="block font-semibold">{church.mainAddress.line1}</span>
-                  <span className="block text-sm text-slate-500">{church.mainAddress.line2}</span>
-                </dd>
-              </div>
-            </dl>
-            <div className="mt-10">
-              <Button href={church.mapsUrl} variant="outline">Get directions</Button>
+      {/* ── Sunday times ── */}
+      <section className="py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-14">
+            <div className="lg:col-span-5">
+              <motion.p {...rise()} className="eyebrow !text-oxblood mb-6">Every Sunday</motion.p>
+              <motion.h2 {...rise(0.05)} className="headline text-[56px] sm:text-[80px] lg:text-[96px]">
+                Service <span className="accent text-oxblood">times.</span>
+              </motion.h2>
+              <motion.p {...rise(0.1)} className="mt-8 text-[18px] leading-[1.6] text-stone-600 max-w-[30rem]">
+                Both services are in the main church at {church.mainAddress.line1}. The 9:00 service streams live on YouTube and Facebook.
+              </motion.p>
+              <motion.div {...rise(0.15)} className="mt-10">
+                <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn-ink">Get directions <ArrowUpRight className="w-4 h-4" /></a>
+              </motion.div>
             </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-7">
+              <table className="w-full text-left">
+                <caption className="sr-only">Sunday service times</caption>
+                <tbody>
+                  {church.services.map((s) => (
+                    <tr key={s.time} className="border-t border-ink/15 first:border-t-2 first:border-ink">
+                      <th scope="row" className="py-6 pr-6 font-normal w-[55%]">
+                        <span className="headline text-[64px] md:text-[88px] whitespace-nowrap">{s.time.replace(" AM", "")}<span className="text-[0.38em] align-top ml-1.5">AM</span></span>
+                      </th>
+                      <td className="py-6 text-[17px] text-ink">
+                        <span className="font-bold block">{s.name}</span>
+                        {s.note && <span className="text-stone-600">{s.note}</span>}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="border-t border-ink/15 border-b">
+                    <th scope="row" className="py-6 pr-6 font-normal align-top">
+                      <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-stone-500">Where</span>
+                    </th>
+                    <td className="py-6 text-[17px]">
+                      <span className="font-bold block">{church.mainAddress.line1}</span>
+                      <span className="text-stone-600">{church.mainAddress.line2}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </motion.div>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-slate-200 aspect-[4/3]">
-            <iframe title="Map to House of Prayer Church" src={church.mapEmbed} className="w-full h-full" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-        </div>
+        </Container>
       </section>
 
-      {/* First Sunday */}
-      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-100">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          <PhotoSlot label="Greeters welcoming guests at the door" className="lg:col-span-7 rounded-2xl aspect-[4/3]" />
-          <div className="lg:col-span-5">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">Your first Sunday</h2>
-            <p className="text-lg text-slate-600 leading-relaxed mb-8">
-              Greeters meet you at the main entrance and help you find a seat. The service has worship, a message from the Bible and time for prayer.
-            </p>
-            <p className="text-slate-600 leading-relaxed mb-10">
-              Want to look first? Watch the 9:00 service live on <a href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-brand">YouTube</a>.
-            </p>
-            <Button to="/plan-your-visit" arrow>Plan Your Visit</Button>
+      {/* ── First Sunday ── */}
+      <section className="pb-24 md:pb-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-14 lg:gap-x-14 items-center">
+            <div className="lg:col-span-6">
+              <motion.p {...rise()} className="eyebrow !text-oxblood mb-6">New here</motion.p>
+              <motion.h2 {...rise(0.05)} className="headline text-[56px] sm:text-[80px] lg:text-[96px]">
+                Your first <span className="accent text-oxblood">Sunday.</span>
+              </motion.h2>
+              <motion.ul {...rise(0.1)} className="mt-12 border-t-2 border-ink">
+                {firstSunday.map((s) => (
+                  <li key={s.step} className="grid sm:grid-cols-[10rem_1fr] gap-x-6 gap-y-1 py-5 border-b border-ink/15">
+                    <span className="headline text-[30px] md:text-[34px]">{s.step}</span>
+                    <span className="text-[16px] leading-[1.6] text-stone-600 sm:pt-1">{s.text}</span>
+                  </li>
+                ))}
+              </motion.ul>
+              <motion.div {...rise(0.15)} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <Link to="/plan-your-visit" className="btn-red">Plan your visit <ArrowRight className="w-4 h-4" /></Link>
+                <Link to="/plan-your-visit" className="link-cta">Common questions</Link>
+              </motion.div>
+            </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-6">
+              <PhotoSlot label="Greeters welcoming guests at the door" className="aspect-[4/5]" />
+            </motion.div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Type moment: Bread of Life */}
-      <section className="relative overflow-hidden bg-slate-950 py-24 md:py-32">
-        <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8">
-          <p className="text-[clamp(3.5rem,9vw,5rem)] font-bold text-rose-300 tracking-tighter leading-none">10 million</p>
-          <div className="mt-10 grid md:grid-cols-2 gap-8 md:gap-16 items-end">
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-tight">
-              Pounds of food our compassion ministry has given out in Waterbury.
-            </h2>
-            <div>
-              <p className="text-white/70 leading-relaxed mb-8">
-                Bread of Life gives free groceries to families who need them. Alpha Ministries offers a Christ-centered home to men and women leaving addiction behind.
+      {/* ── Full-bleed statement ── */}
+      <section className="relative text-white bg-ink-night">
+        <PhotoSlot label="Bread of Life volunteers serving families" dark className="h-[85vh] min-h-[560px] max-h-[920px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+        <Container className="absolute inset-x-0 bottom-0 pb-14 md:pb-20">
+          <div className="grid lg:grid-cols-12 gap-8 items-end">
+            <motion.h2 {...rise()} className="lg:col-span-8 headline text-[52px] sm:text-[84px] lg:text-[108px]">
+              10 million pounds of food for our <span className="accent">neighbors.</span>
+            </motion.h2>
+            <motion.div {...rise(0.1)} className="lg:col-span-4">
+              <p className="text-[17px] leading-[1.6] text-white/85">
+                That's how much our compassion ministry has given out in Waterbury, much of it through the Bread of Life food pantry.
               </p>
-              <Button to="/give" variant="outlineDark">See where gifts go</Button>
-            </div>
+              <Link to="/give" className="link-cta-light mt-6">See where gifts go</Link>
+            </motion.div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Values */}
-      <section className="py-24 md:py-32">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">Core values at House of Prayer</h2>
-            <p className="text-slate-600 leading-relaxed mb-8">Prayer comes first. Our goal is prayer 24 hours a day, every day of the year, in our prayer center.</p>
-            <Link to="/about" className="inline-flex items-center min-h-[44px] font-semibold underline decoration-slate-300 underline-offset-4 hover:decoration-brand">Read our story</Link>
+      {/* ── Core values ── */}
+      <section className="bg-paper-deep py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-8 items-end mb-16 md:mb-20">
+            <motion.h2 {...rise()} className="lg:col-span-7 headline text-[56px] sm:text-[84px] lg:text-[104px]">
+              What we <span className="accent text-oxblood">stand</span> for.
+            </motion.h2>
+            <motion.p {...rise(0.1)} className="lg:col-span-4 lg:col-start-9 text-[17px] leading-[1.6] text-stone-600">
+              Seven core values shape how we worship, serve and live as one church family. Prayer comes first.
+            </motion.p>
           </div>
-          <dl className="lg:col-span-8 grid sm:grid-cols-2 gap-x-12 border-t border-slate-200">
-            {coreValues.slice(1).map((v) => (
-              <div key={v.title} className="py-6 border-b border-slate-200">
-                <dt className="text-lg font-bold tracking-tight mb-1">{v.title}</dt>
-                <dd className="text-slate-600 leading-relaxed">{v.text}</dd>
-              </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 border-t-2 border-ink">
+            {coreValues.map((v, i) => (
+              <motion.div key={v.title} {...rise((i % 4) * 0.08)} className="pt-8 pb-10 sm:pr-8 border-b border-ink/15">
+                <span className="headline text-[48px] text-oxblood">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="headline text-[30px] mt-5">{v.title}</h3>
+                <p className="mt-3 text-[15px] leading-[1.6] text-stone-600">{v.text}</p>
+              </motion.div>
             ))}
-          </dl>
-        </div>
+            <motion.div {...rise(0.24)} className="pt-8 pb-10 border-b border-ink/15 flex items-end">
+              <Link to="/about" className="link-cta">Read our story <ArrowRight className="w-4 h-4" /></Link>
+            </motion.div>
+          </div>
+        </Container>
       </section>
 
-      {/* Ministries */}
-      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-100">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight">Ministries at House of Prayer</h2>
-            <Link to="/ministries" className="inline-flex items-center min-h-[44px] font-semibold underline decoration-slate-300 underline-offset-4 hover:decoration-brand">See all ten ministries</Link>
+      {/* ── Ministries ── */}
+      <section className="py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-8 items-end mb-14">
+            <motion.h2 {...rise()} className="lg:col-span-8 headline text-[56px] sm:text-[84px] lg:text-[104px]">
+              Find your <span className="accent text-oxblood">place.</span>
+            </motion.h2>
+            <motion.div {...rise(0.1)} className="lg:col-span-4 lg:justify-self-end">
+              <Link to="/ministries" className="link-cta">All ten ministries <ArrowRight className="w-4 h-4" /></Link>
+            </motion.div>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {highlights.map((m) => (
-              <Link key={m.name} to="/ministries" className="group block bg-white rounded-2xl border border-slate-200 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 overflow-hidden">
-                <div className="overflow-hidden"><PhotoSlot label={m.name} className="aspect-[4/3] transition-transform duration-500 group-hover:scale-[1.03]" /></div>
-                <div className="p-6">
-                  <h3 className="font-bold tracking-tight group-hover:text-brand transition-colors">{m.name}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed mt-2">{m.text}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Watch + events */}
-      <section className="py-24 md:py-32">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12">
-          <a href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="lg:col-span-3 group block relative rounded-2xl overflow-hidden">
-            <PhotoSlot label="Pastor preaching (sermon thumbnail)" dark className="aspect-video transition-transform duration-500 group-hover:scale-[1.02]" />
-            <div className="absolute inset-0 bg-slate-950/40" />
-            <div className="absolute bottom-6 left-6 right-6">
-              <p className="text-sm text-white/80 mb-1">Live every Sunday at 9:00 AM</p>
-              <p className="text-2xl md:text-3xl font-bold text-white tracking-tight">Watch the latest sermon</p>
-            </div>
-          </a>
-          <div className="lg:col-span-2 flex flex-col">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-8">Upcoming events</h2>
-            <div className="divide-y divide-slate-200 border-y border-slate-200 flex-1">
-              {upcoming.length ? upcoming.map((e) => {
-                const d = formatDate(e.date);
-                return (
-                  <div key={e.title} className="py-5 flex gap-5">
-                    <div className="w-14 shrink-0">
-                      <p className="text-xs font-bold tracking-widest text-brand">{d.month}</p>
-                      <p className="text-3xl font-bold tracking-tight leading-none mt-1">{d.day}</p>
-                    </div>
-                    <div>
-                      <p className="font-bold tracking-tight">{e.title}</p>
-                      <p className="text-sm text-slate-600 mt-1">{e.time}</p>
-                    </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+            {highlights.map((m, i) => (
+              <motion.div key={m.name} {...rise(i * 0.08)}>
+                <Link to="/ministries" className="group block">
+                  <div className="overflow-hidden">
+                    <PhotoSlot label={m.name} className="aspect-[4/5] transition-transform duration-700 ease-out group-hover:scale-[1.03]" />
                   </div>
-                );
-              }) : <p className="py-5 text-slate-600 text-sm">New events will be posted here.</p>}
-            </div>
-            <Link to="/events" className="mt-6 inline-flex items-center min-h-[44px] font-semibold underline decoration-slate-300 underline-offset-4 hover:decoration-brand w-fit">See the events calendar</Link>
+                  <h3 className="headline text-[32px] mt-5 transition-colors group-hover:text-oxblood">{m.name}</h3>
+                  <p className="mt-2 text-[15px] leading-[1.6] text-stone-600">{m.text}</p>
+                </Link>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Close */}
-      <section className="bg-slate-950">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-24 md:py-32 grid lg:grid-cols-2 gap-12 items-start">
-          <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-tight">Visit House of Prayer this Sunday</h2>
-          <div>
-            <p className="text-white/70 leading-relaxed mb-8 max-w-md">
-              Tell us which Sunday you're coming and a greeter will look out for you at the door.
-            </p>
-            <Button to="/plan-your-visit" arrow>Plan Your Visit</Button>
+      {/* ── Watch + events ── */}
+      <section className="bg-paper-deep py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-14 lg:gap-x-14">
+            <motion.div {...rise()} className="lg:col-span-7">
+              <a href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="group block relative overflow-hidden text-white">
+                <PhotoSlot label="Pastor preaching (sermon thumbnail)" dark className="aspect-video transition-transform duration-700 group-hover:scale-[1.02]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="w-20 h-20 bg-oxblood flex items-center justify-center transition-transform group-hover:scale-105"><Play className="w-8 h-8 text-white fill-white ml-1" /></span>
+                </div>
+                <div className="absolute bottom-6 left-6 right-6">
+                  <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-white/70 mb-2">Live Sundays at 9:00 AM</p>
+                  <p className="headline text-[36px] md:text-[48px]">Watch the latest sermon</p>
+                </div>
+              </a>
+            </motion.div>
+            <motion.div {...rise(0.1)} className="lg:col-span-5">
+              <p className="eyebrow mb-6">Coming up</p>
+              <h2 className="headline text-[56px] sm:text-[72px]">Upcoming <span className="accent text-oxblood">events.</span></h2>
+              <div className="mt-10 border-t-2 border-ink">
+                {upcoming.length ? upcoming.map((e) => {
+                  const d = formatDate(e.date);
+                  return (
+                    <div key={e.title} className="py-5 border-b border-ink/15 grid grid-cols-[5rem_1fr] gap-4 items-center">
+                      <div>
+                        <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-oxblood">{d.month}</p>
+                        <p className="headline text-[48px]">{d.day}</p>
+                      </div>
+                      <div>
+                        <p className="headline text-[28px]">{e.title}</p>
+                        <p className="text-stone-600 text-[15px] mt-1">{e.time}</p>
+                      </div>
+                    </div>
+                  );
+                }) : <p className="py-5 text-stone-600">New events will be posted here.</p>}
+              </div>
+              <Link to="/events" className="link-cta mt-8">See all events <ArrowRight className="w-4 h-4" /></Link>
+            </motion.div>
           </div>
-        </div>
+        </Container>
       </section>
-    </>
+    </div>
   );
 }

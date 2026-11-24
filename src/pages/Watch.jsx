@@ -1,47 +1,50 @@
-import { Youtube, Facebook } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { church } from "../data/church";
-import { Button, PageHero, PhotoSlot } from "../components/ui";
+import { Container, PageHero, PhotoSlot, rise } from "../components/ui";
 
 export default function Watch() {
   return (
     <>
       <PageHero
-        title="Watch the Sunday service online"
-        text="The 9:00 AM service streams live every Sunday on YouTube and Facebook, and past sermons stay on our YouTube channel."
-        photo="Livestream camera view of the stage"
-      />
+        eyebrow="Watch online"
+        lines={["Worship with us", <span key="a">from <span className="accent text-oxblood">anywhere.</span></span>]}
+        intro="The 9:00 AM service streams live every Sunday on YouTube and Facebook. Past sermons stay on our YouTube channel."
+      >
+        <a href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="btn-red">Watch on YouTube <ArrowUpRight className="w-4 h-4" /></a>
+        <a href={church.social.facebook} target="_blank" rel="noopener noreferrer" className="btn-ghost">Watch on Facebook</a>
+      </PageHero>
 
-      <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12 items-start">
+      <section className="py-24 md:py-36">
+        <Container>
           {/* Swap this for a YouTube live embed: https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID */}
-          <a href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="lg:col-span-8 group block rounded-2xl overflow-hidden">
-            <PhotoSlot label="Livestream player" dark className="aspect-video transition-transform duration-500 group-hover:scale-[1.02]" />
-          </a>
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-8">Where to watch</h2>
-            <div className="space-y-4">
-              <a href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 min-h-[64px] rounded-2xl border border-slate-200 px-6 py-4 hover:-translate-y-0.5 hover:border-slate-400 transition-all">
-                <Youtube className="w-6 h-6 text-[#FF0000]" aria-hidden="true" />
-                <span className="font-semibold group-hover:text-brand">Watch on YouTube</span>
-              </a>
-              <a href={church.social.facebook} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 min-h-[64px] rounded-2xl border border-slate-200 px-6 py-4 hover:-translate-y-0.5 hover:border-slate-400 transition-all">
-                <Facebook className="w-6 h-6 text-[#1877F2]" aria-hidden="true" />
-                <span className="font-semibold group-hover:text-brand">Watch on Facebook</span>
-              </a>
+          <motion.a {...rise()} href={church.social.youtube} target="_blank" rel="noopener noreferrer" className="group block relative overflow-hidden bg-ink-night">
+            <PhotoSlot label="Livestream player" dark className="aspect-video transition-transform duration-700 group-hover:scale-[1.02]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="w-24 h-24 bg-oxblood flex items-center justify-center transition-transform group-hover:scale-105"><Play className="w-10 h-10 text-white fill-white ml-1" /></span>
             </div>
-            <p className="mt-8 text-slate-600 leading-relaxed">Live at 9:00 AM Eastern every Sunday.</p>
-          </div>
-        </div>
+            <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 text-white">
+              <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-white/70 mb-2">Every Sunday · 9:00 AM Eastern</p>
+              <p className="headline text-[40px] md:text-[64px]">Live on YouTube</p>
+            </div>
+          </motion.a>
+        </Container>
       </section>
 
-      <section className="bg-slate-950">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 grid lg:grid-cols-2 gap-10 items-start">
-          <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-tight">Worship with us in person</h2>
-          <div>
-            <p className="text-white/70 leading-relaxed mb-8 max-w-md">Services are at 9:00 and 11:00 AM at {church.mainAddress.line1}.</p>
-            <Button to="/plan-your-visit" arrow>Plan Your Visit</Button>
+      <section className="bg-paper-deep py-24 md:py-32">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-8 items-end">
+            <motion.h2 {...rise()} className="lg:col-span-8 headline text-[52px] sm:text-[80px] lg:text-[96px]">
+              Come in <span className="accent text-oxblood">person.</span>
+            </motion.h2>
+            <motion.div {...rise(0.1)} className="lg:col-span-4">
+              <p className="text-[17px] leading-[1.6] text-stone-600 mb-8">Services are at 9:00 and 11:15 AM at {church.mainAddress.line1}.</p>
+              <Link to="/plan-your-visit" className="btn-red">Plan your visit <ArrowRight className="w-4 h-4" /></Link>
+            </motion.div>
           </div>
-        </div>
+        </Container>
       </section>
     </>
   );

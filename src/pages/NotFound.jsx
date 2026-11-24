@@ -1,13 +1,15 @@
-import { Button } from "../components/ui";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { Container } from "../components/ui";
 
 export default function NotFound() {
   return (
-    <section className="min-h-[70vh] flex items-center justify-center px-6 py-24 text-center">
-      <div>
-        <p className="text-[11px] font-bold tracking-[0.2em] text-brand mb-4">PAGE NOT FOUND</p>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-8">This page wandered off.</h1>
-        <Button to="/" arrow>Back to home</Button>
-      </div>
+    <section className="min-h-[80svh] flex items-end">
+      <Container className="w-full pt-[160px] pb-20">
+        <p className="text-[12px] font-bold uppercase tracking-[0.22em] mb-6 text-oxblood">Page not found</p>
+        <h1 className="headline text-[64px] sm:text-[100px] lg:text-[132px]">This page <span className="accent text-oxblood">wandered off.</span></h1>
+        <Link to="/" className="btn-red mt-10">Back to home <ArrowRight className="w-4 h-4" /></Link>
+      </Container>
     </section>
   );
 }

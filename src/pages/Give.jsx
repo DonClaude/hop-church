@@ -1,64 +1,71 @@
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { church } from "../data/church";
-import { Button, PageHero, PhotoSlot } from "../components/ui";
+import { Container, PageHero, PhotoSlot, rise } from "../components/ui";
 
 export default function Give() {
+  const ways = [
+    ...(church.givingUrl ? [{ title: "Online", text: "Give once or set up a recurring gift.", action: <a href={church.givingUrl} target="_blank" rel="noopener noreferrer" className="btn-red">Give online <ArrowUpRight className="w-4 h-4" /></a> }] : []),
+    { title: "On Sunday", text: `Give during the 9:00 or 11:15 AM service at ${church.mainAddress.line1}.` },
+    { title: "By mail", text: "Send a check to House of Prayer Church, 1263 Thomaston Avenue, Waterbury, CT 06704." },
+  ];
+
   return (
     <>
       <PageHero
-        title="Give to House of Prayer"
-        text="Gifts pay for Sunday ministry, the Bread of Life food pantry, Alpha Ministries and missions."
-        photo="Families receiving groceries at Bread of Life"
+        eyebrow="Give"
+        lines={["Generosity", <span key="a">that <span className="accent text-oxblood">feeds.</span></span>]}
+        intro="Gifts pay for Sunday ministry, the Bread of Life food pantry, Alpha Ministries and missions around the world."
       />
 
-      <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">Ways to give</h2>
-            <p className="text-slate-600 leading-relaxed">
-              Questions about giving? Call <a href={church.phoneHref} className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4">{church.phone}</a>.
-            </p>
-          </div>
-          <div className="lg:col-span-8 border-t border-slate-200">
-            {church.givingUrl && (
-              <div className="py-8 border-b border-slate-200 grid sm:grid-cols-[1fr_auto] gap-6 items-center">
-                <div><h3 className="text-xl font-bold tracking-tight">Online</h3><p className="text-slate-600 mt-1">Give once or set up a recurring gift.</p></div>
-                <Button href={church.givingUrl} arrow>Give online</Button>
-              </div>
-            )}
-            <div className="py-8 border-b border-slate-200">
-              <h3 className="text-xl font-bold tracking-tight">During a service</h3>
-              <p className="text-slate-600 mt-1">Give at the 9:00 or 11:00 AM service at {church.mainAddress.line1}.</p>
+      <section className="py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-14">
+            <div className="lg:col-span-5">
+              <motion.h2 {...rise()} className="headline text-[56px] sm:text-[80px] lg:text-[96px]">Ways to <span className="accent text-oxblood">give.</span></motion.h2>
+              <motion.p {...rise(0.05)} className="mt-8 text-[17px] leading-[1.6] text-stone-600">
+                Questions about giving? Call <a href={church.phoneHref} className="font-semibold text-ink border-b-2 border-ink">{church.phone}</a>.
+              </motion.p>
             </div>
-            <div className="py-8 border-b border-slate-200">
-              <h3 className="text-xl font-bold tracking-tight">By mail</h3>
-              <p className="text-slate-600 mt-1">Send a check to House of Prayer Church, 1263 Thomaston Avenue, Waterbury, CT 06704.</p>
-            </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-7 border-t-2 border-ink">
+              {ways.map((w) => (
+                <div key={w.title} className="py-7 border-b border-ink/15 grid sm:grid-cols-[12rem_1fr] gap-x-6 gap-y-2">
+                  <h3 className="headline text-[34px] md:text-[40px]">{w.title}</h3>
+                  <div className="sm:pt-2">
+                    <p className="text-[17px] leading-[1.6] text-stone-600">{w.text}</p>
+                    {w.action && <div className="mt-5">{w.action}</div>}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="bg-slate-950 py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-start">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-tight mb-6">Where gifts go in Waterbury</h2>
-            <p className="text-white/70 text-lg leading-relaxed mb-6">
-              Through Bread of Life and our compassion ministry, the church has given out more than 10 million pounds of food to families in the city.
-            </p>
-            <p className="text-white/70 leading-relaxed">
-              Gifts also keep Alpha Ministries open, where men and women in recovery live and grow in faith. Each quarter we will share a report on what giving made possible.
-            </p>
+      <section className="relative text-white bg-ink-night">
+        <PhotoSlot label="Volunteers packing groceries" dark className="h-[80vh] min-h-[540px] max-h-[880px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+        <Container className="absolute inset-x-0 bottom-0 pb-14 md:pb-20">
+          <div className="grid lg:grid-cols-12 gap-8 items-end">
+            <motion.h2 {...rise()} className="lg:col-span-8 headline text-[52px] sm:text-[84px] lg:text-[108px]">
+              10 million pounds of food, and <span className="accent">counting.</span>
+            </motion.h2>
+            <motion.p {...rise(0.1)} className="lg:col-span-4 text-[17px] leading-[1.6] text-white/85">
+              Our compassion ministry has given that much food to Waterbury families. Gifts also keep Alpha Ministries open for men and women in recovery.
+            </motion.p>
           </div>
-          <PhotoSlot label="Volunteers packing groceries" dark className="rounded-2xl aspect-[4/3]" />
-        </div>
+        </Container>
       </section>
 
-      <section className="py-24 md:py-28">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <blockquote>
-            <p className="text-3xl md:text-4xl font-bold tracking-tight leading-snug">"Every man according as he purposeth in his heart, so let him give; not grudgingly, or of necessity: for God loveth a cheerful giver."</p>
-            <footer className="mt-6 text-brand font-semibold">2 Corinthians 9:7</footer>
-          </blockquote>
-        </div>
+      <section className="py-24 md:py-36">
+        <Container>
+          <motion.blockquote {...rise()} className="max-w-4xl pl-6 md:pl-10 border-l-[3px] border-oxblood">
+            <p className="serif italic text-[28px] md:text-[44px] leading-[1.25] text-ink-soft">
+              “Every man according as he purposeth in his heart, so let him give; not grudgingly, or of necessity: for God loveth a cheerful giver.”
+            </p>
+            <footer className="mt-6 text-[12px] font-bold uppercase tracking-[0.2em] text-stone-500">2 Corinthians 9:7</footer>
+          </motion.blockquote>
+        </Container>
       </section>
     </>
   );

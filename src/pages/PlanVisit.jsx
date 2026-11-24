@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Plus, Minus } from "lucide-react";
 import { church } from "../data/church";
-import { Button, PageHero, PhotoSlot } from "../components/ui";
+import { Container, PageHero, PhotoSlot, rise } from "../components/ui";
 import { sendForm } from "../lib/forms";
 
 const faqs = [
@@ -23,10 +24,31 @@ function nextSundays(n = 6) {
   return out;
 }
 
+// Square choice tiles (no pills), like the worship site's role tiles
+function Choice({ name, options, value, onChange }) {
+  return (
+    <div className="grid grid-cols-2 gap-2" role="radiogroup">
+      {options.map((o) => (
+        <button
+          type="button"
+          key={o}
+          role="radio"
+          aria-checked={value === o}
+          onClick={() => onChange(o)}
+          className={`min-h-[52px] px-4 py-3 text-left text-[15px] font-semibold border-2 transition-colors ${value === o ? "bg-ink text-white border-ink" : "border-ink/15 hover:border-ink"}`}
+        >
+          {o}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function VisitForm() {
   const navigate = useNavigate();
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
+  const [service, setService] = useState(church.services[0].time);
   const sundays = nextSundays();
 
   async function onSubmit(e) {
@@ -36,14 +58,8 @@ function VisitForm() {
     setError("");
     try {
       const result = await sendForm("Plan a visit", {
-        Name: f.get("name"),
-        Email: f.get("email"),
-        Phone: f.get("phone"),
-        Sunday: f.get("sunday"),
-        Service: f.get("service"),
-        "Adults": f.get("adults"),
-        "Kids": f.get("kids"),
-        Questions: f.get("questions"),
+        Name: f.get("name"), Email: f.get("email"), Phone: f.get("phone"),
+        Sunday: f.get("sunday"), Service: service, Adults: f.get("adults"), Kids: f.get("kids"), Questions: f.get("questions"),
       });
       if (result === "sent") navigate("/thank-you");
       else setStatus("email");
@@ -53,39 +69,36 @@ function VisitForm() {
     }
   }
 
-  const field = "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition";
-  const label = "block text-xs font-semibold tracking-wide text-slate-600 mb-2";
-
   if (status === "email") {
     return (
-      <div className="text-center py-10">
-        <p className="text-2xl font-bold tracking-tight mb-3">One more step</p>
-        <p className="text-slate-500 max-w-sm mx-auto">Your email app opened with your details filled in. Just press send, and we'll be ready to welcome you.</p>
+      <div className="py-10">
+        <p className="headline text-[48px]">One more <span className="accent text-oxblood">step.</span></p>
+        <p className="mt-4 text-stone-600 max-w-sm">Your email app opened with your details filled in. Press send, and a greeter will look out for you on Sunday.</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid sm:grid-cols-2 gap-5">
-      <div className="sm:col-span-2"><label htmlFor="name" className={label}>Your name</label><input id="name" name="name" required autoComplete="name" className={field} /></div>
-      <div><label htmlFor="email" className={label}>Email</label><input id="email" name="email" type="email" required autoComplete="email" className={field} /></div>
-      <div><label htmlFor="phone" className={label}>Phone (optional)</label><input id="phone" name="phone" type="tel" autoComplete="tel" className={field} /></div>
+    <form onSubmit={onSubmit} className="grid sm:grid-cols-2 gap-x-8 gap-y-8">
+      <div className="sm:col-span-2"><label htmlFor="name" className="field-label">Your name</label><input id="name" name="name" required autoComplete="name" className="field" /></div>
+      <div><label htmlFor="email" className="field-label">Email</label><input id="email" name="email" type="email" required autoComplete="email" className="field" /></div>
+      <div><label htmlFor="phone" className="field-label">Phone (optional)</label><input id="phone" name="phone" type="tel" autoComplete="tel" className="field" /></div>
       <div>
-        <label htmlFor="sunday" className={label}>Which Sunday?</label>
-        <select id="sunday" name="sunday" className={field}>{sundays.map((s) => <option key={s}>{s}</option>)}<option>Not sure yet</option></select>
+        <label htmlFor="sunday" className="field-label">Sunday</label>
+        <select id="sunday" name="sunday" className="field">{sundays.map((s) => <option key={s}>{s}</option>)}<option>Not sure yet</option></select>
       </div>
       <div>
-        <label htmlFor="service" className={label}>Which service?</label>
-        <select id="service" name="service" className={field}>{church.services.map((s) => <option key={s.time}>{s.time}</option>)}</select>
+        <p className="field-label mb-3">Service</p>
+        <Choice name="service" options={church.services.map((s) => s.time)} value={service} onChange={setService} />
       </div>
-      <div><label htmlFor="adults" className={label}>Adults</label><input id="adults" name="adults" type="number" min="1" defaultValue="1" className={field} /></div>
-      <div><label htmlFor="kids" className={label}>Kids</label><input id="kids" name="kids" type="number" min="0" defaultValue="0" className={field} /></div>
-      <div className="sm:col-span-2"><label htmlFor="questions" className={label}>Anything we should know? (optional)</label><textarea id="questions" name="questions" rows="3" className={field} /></div>
-      {error && <p className="sm:col-span-2 text-sm text-brand" role="alert">{error}</p>}
+      <div><label htmlFor="adults" className="field-label">Adults</label><input id="adults" name="adults" type="number" min="1" defaultValue="1" className="field" /></div>
+      <div><label htmlFor="kids" className="field-label">Kids</label><input id="kids" name="kids" type="number" min="0" defaultValue="0" className="field" /></div>
+      <div className="sm:col-span-2"><label htmlFor="questions" className="field-label">Anything we should know? (optional)</label><textarea id="questions" name="questions" rows="3" className="field resize-none" /></div>
+      {error && <p className="sm:col-span-2 text-oxblood" role="alert">{error}</p>}
       <div className="sm:col-span-2">
-        <Button type="submit" arrow disabled={status === "sending"} className="w-full sm:w-auto disabled:opacity-60">
-          {status === "sending" ? "Sending…" : "Send my visit plan"}
-        </Button>
+        <button type="submit" disabled={status === "sending"} className="btn-red w-full sm:w-auto disabled:opacity-60">
+          {status === "sending" ? "Sending…" : <>Send my visit plan <ArrowRight className="w-4 h-4" /></>}
+        </button>
       </div>
     </form>
   );
@@ -96,75 +109,68 @@ export default function PlanVisit() {
   return (
     <>
       <PageHero
-        title="Plan your first visit"
-        text="Sundays at 9:00 and 11:00 AM in the main church at 1245 Thomaston Avenue, Waterbury."
-        photo="Smiling greeter at the front entrance"
-      />
+        eyebrow="Plan your visit"
+        lines={["We saved you", <span key="a">a <span className="accent text-oxblood">seat.</span></span>]}
+        intro="Sundays at 9:00 and 11:15 AM in the main church at 1245 Thomaston Avenue, Waterbury. Here's what to expect on your first visit."
+      >
+        <a href="#visit-form" className="btn-red">Tell us you're coming <ArrowRight className="w-4 h-4" /></a>
+      </PageHero>
 
-      <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-10">Service times and parking</h2>
-            <dl className="divide-y divide-slate-200 border-y border-slate-200">
-              {church.services.map((s) => (
-                <div key={s.time} className="py-5 flex items-baseline justify-between gap-6">
-                  <dt className="text-slate-600">{s.name}{s.note ? ` (${s.note.toLowerCase()})` : ""}</dt>
-                  <dd className="text-2xl font-bold tracking-tight">{s.time}</dd>
-                </div>
-              ))}
-              <div className="py-5 flex items-baseline justify-between gap-6">
-                <dt className="text-slate-600">Address</dt>
-                <dd className="text-right font-semibold">{church.mainAddress.line1}<span className="block text-sm font-normal text-slate-500">{church.mainAddress.line2}</span></dd>
-              </div>
-            </dl>
-            <p className="mt-8 text-slate-600 leading-relaxed max-w-lg">
-              Park in the church lot and come in through the main entrance, where greeters will help you find a seat.
-            </p>
-            <div className="mt-10"><Button href={church.mapsUrl} variant="outline">Get directions</Button></div>
+      <section className="py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-14">
+            <div className="lg:col-span-5">
+              <motion.h2 {...rise()} className="headline text-[56px] sm:text-[80px] lg:text-[96px]">Getting <span className="accent text-oxblood">here.</span></motion.h2>
+              <motion.p {...rise(0.05)} className="mt-8 text-[18px] leading-[1.6] text-stone-600 max-w-[30rem]">
+                Park in the church lot and come in through the main entrance. Greeters will help you find a seat.
+              </motion.p>
+              <motion.div {...rise(0.1)} className="mt-10">
+                <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn-ink">Get directions <ArrowUpRight className="w-4 h-4" /></a>
+              </motion.div>
+            </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-7 aspect-[4/3] border-2 border-ink">
+              <iframe title="Map to House of Prayer Church" src={church.mapEmbed} className="w-full h-full" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            </motion.div>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-slate-200 aspect-[4/3]">
-            <iframe title="Map to House of Prayer Church" src={church.mapEmbed} className="w-full h-full" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12 lg:gap-16">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight">Questions guests ask</h2>
-            <PhotoSlot label="Families arriving for the service" className="hidden lg:block mt-10 rounded-2xl aspect-[4/5]" />
+      <section id="questions" className="bg-paper-deep py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-14">
+            <div className="lg:col-span-5">
+              <motion.h2 {...rise()} className="headline text-[56px] sm:text-[80px] lg:text-[96px]">Common <span className="accent text-oxblood">questions.</span></motion.h2>
+              <motion.div {...rise(0.1)} className="hidden lg:block mt-12"><PhotoSlot label="Families arriving for the service" className="aspect-[4/5]" /></motion.div>
+            </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-7 border-t-2 border-ink">
+              {faqs.map((f, i) => {
+                const open = openFaq === i;
+                return (
+                  <div key={f.q} className="border-b border-ink/15">
+                    <button onClick={() => setOpenFaq(open ? -1 : i)} aria-expanded={open} className="group w-full min-h-[64px] flex items-center justify-between gap-6 py-6 text-left">
+                      <span className={`headline text-[28px] md:text-[34px] transition-colors ${open ? "text-oxblood" : "group-hover:text-oxblood"}`}>{f.q}</span>
+                      {open ? <Minus className="w-6 h-6 shrink-0 text-oxblood" /> : <Plus className="w-6 h-6 shrink-0" />}
+                    </button>
+                    {open && <p className="pb-8 -mt-1 text-[17px] text-stone-600 leading-[1.6] max-w-2xl">{f.a}</p>}
+                  </div>
+                );
+              })}
+            </motion.div>
           </div>
-          <div className="lg:col-span-8 divide-y divide-slate-200 border-y border-slate-200">
-            {faqs.map((f, i) => {
-              const open = openFaq === i;
-              return (
-                <div key={f.q}>
-                  <button
-                    onClick={() => setOpenFaq(open ? -1 : i)}
-                    aria-expanded={open}
-                    className="w-full min-h-[56px] flex items-center justify-between gap-6 py-5 text-left text-lg font-semibold tracking-tight hover:text-brand transition-colors"
-                  >
-                    {f.q}
-                    <ChevronDown className={`w-5 h-5 shrink-0 transition-transform ${open ? "rotate-180 text-brand" : "text-slate-400"}`} />
-                  </button>
-                  {open && <p className="pb-6 -mt-1 text-slate-600 leading-relaxed max-w-2xl">{f.a}</p>}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        </Container>
       </section>
 
-      <section id="visit-form" className="py-24 md:py-32 bg-slate-950">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter leading-tight mb-6">Tell us which Sunday you're coming</h2>
-            <p className="text-white/70 leading-relaxed">A greeter will look out for you at the door and save you a seat.</p>
+      <section id="visit-form" className="py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-14">
+            <div className="lg:col-span-5">
+              <motion.p {...rise()} className="eyebrow !text-oxblood mb-6">Let us know</motion.p>
+              <motion.h2 {...rise(0.05)} className="headline text-[56px] sm:text-[80px] lg:text-[96px]">Tell us you're <span className="accent text-oxblood">coming.</span></motion.h2>
+              <motion.p {...rise(0.1)} className="mt-8 text-[18px] leading-[1.6] text-stone-600 max-w-[28rem]">A greeter will look out for you at the door and save you a seat.</motion.p>
+            </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-7"><VisitForm /></motion.div>
           </div>
-          <div className="lg:col-span-8 bg-white rounded-2xl p-8 md:p-10">
-            <VisitForm />
-          </div>
-        </div>
+        </Container>
       </section>
     </>
   );

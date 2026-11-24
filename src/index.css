@@ -1,14 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
-  body { font-family: "Inter", system-ui, sans-serif; }
-  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [role="button"]:focus-visible { outline: 2px solid #AC0C2F; outline-offset: 3px; }
-  ::selection { background: rgba(172, 12, 47, 0.15); }
+  html {
+    font-family: "Hanken Grotesk Variable", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+  body { font-feature-settings: "ss01", "cv11"; color: #0D0D0E; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+    outline: 2px solid #AC0C2F; outline-offset: 3px;
+  }
+  ::selection { background: #AC0C2F; color: #fff; }
+}
+
+@layer utilities {
+  /* Same type system as hopworship.com */
+  .headline {
+    font-family: "Archivo Variable", "Hanken Grotesk Variable", sans-serif;
+    font-weight: 800;
+    font-stretch: 72%;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    line-height: 0.88;
+  }
+  .accent {
+    font-family: "Newsreader Variable", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.02em;
+    font-stretch: normal;
+  }
+  .serif { font-family: "Newsreader Variable", Georgia, serif; font-optical-sizing: auto; }
+  .eyebrow { @apply text-[12px] font-semibold uppercase tracking-[0.16em] text-stone-500; }
+
+  /* Square buttons, no pills */
+  .btn-red { @apply inline-flex items-center justify-center gap-2.5 min-h-[52px] bg-oxblood text-white px-7 py-4 text-[14px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-oxblood-deep active:translate-y-px; }
+  .btn-ink { @apply inline-flex items-center justify-center gap-2.5 min-h-[52px] bg-ink text-white px-7 py-4 text-[14px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-oxblood active:translate-y-px; }
+  .btn-ghost-light { @apply inline-flex items-center justify-center gap-2.5 min-h-[52px] border border-white/40 text-white px-7 py-4 text-[14px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-white hover:text-ink active:translate-y-px; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-2.5 min-h-[52px] border border-ink/25 text-ink px-7 py-4 text-[14px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-ink hover:text-white active:translate-y-px; }
+  .link-cta { @apply inline-flex items-center gap-2 min-h-[44px] text-[14px] font-bold uppercase tracking-[0.08em] text-ink border-b-2 border-ink transition-colors hover:border-oxblood hover:text-oxblood; }
+  .link-cta-light { @apply inline-flex items-center gap-2 min-h-[44px] text-[14px] font-bold uppercase tracking-[0.08em] text-white border-b-2 border-white transition-colors hover:border-oxblood hover:text-white; }
+
+  /* Underlined form fields, like the worship site */
+  .field { @apply w-full bg-transparent border-0 border-b-2 border-ink/20 px-0 py-3 text-[17px] text-ink placeholder:text-stone-400 focus:outline-none focus:border-oxblood transition-colors; }
+  .field-label { @apply block text-[12px] font-bold uppercase tracking-[0.14em] text-stone-500 mb-1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

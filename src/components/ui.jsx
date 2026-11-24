@@ -2,34 +2,36 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ImageIcon } from "lucide-react";
 
-// Sections no longer fade in on scroll; only each page's hero enters once on load.
-export const fadeUp = () => ({});
+// Shared building blocks, matching hopworship.com.
 
-export function Eyebrow({ children, tone = "muted", className = "" }) {
-  const color = tone === "light" ? "text-rose-300" : tone === "brand" ? "text-brand" : "text-slate-500";
-  return <p className={`text-xs font-semibold tracking-[0.2em] uppercase ${color} mb-4 ${className}`}>{children}</p>;
-}
+export const EASE = [0.16, 1, 0.3, 1];
 
-export function SectionHeading({ title, text, center = false, dark = false }) {
+// Slides content up as it scrolls into view (same motion as the worship site)
+export const rise = (delay = 0) => ({
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.15 },
+  transition: { duration: 0.85, delay, ease: EASE },
+});
+
+export const Container = ({ className = "", children }) => (
+  <div className={`max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 ${className}`}>{children}</div>
+);
+
+export function MaskLine({ children, delay = 0 }) {
   return (
-    <div className={`${center ? "text-center mx-auto" : ""} max-w-3xl mb-12`}>
-      <h2 className={`text-3xl md:text-5xl font-bold tracking-tighter leading-tight ${dark ? "text-white" : "text-slate-900"}`}>{title}</h2>
-      {text && <p className={`mt-5 text-lg leading-relaxed ${dark ? "text-white/70" : "text-slate-600"}`}>{text}</p>}
-    </div>
+    <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+      <motion.span className="block" initial={{ y: "105%" }} animate={{ y: 0 }} transition={{ duration: 1, delay, ease: EASE }}>
+        {children}
+      </motion.span>
+    </span>
   );
 }
 
-const btnBase =
-  "inline-flex items-center justify-center gap-2 min-h-[48px] px-7 py-3 text-sm font-semibold rounded-full transition-all duration-200 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
-const btnStyles = {
-  primary: "bg-brand hover:bg-brand-dark text-white",
-  glass: "bg-white/10 hover:bg-white/20 border border-white/25 text-white",
-  outline: "border border-slate-300 hover:border-slate-900 text-slate-900",
-  outlineDark: "border border-white/25 hover:border-white/60 text-white",
-};
+const btn = { red: "btn-red", ink: "btn-ink", ghostLight: "btn-ghost-light", ghost: "btn-ghost", link: "link-cta", linkLight: "link-cta-light" };
 
-export function Button({ to, href, children, variant = "primary", arrow = false, className = "", ...rest }) {
-  const cls = `${btnBase} ${btnStyles[variant]} ${className}`;
+export function Button({ to, href, children, variant = "red", arrow = false, className = "", ...rest }) {
+  const cls = `${btn[variant]} ${className}`;
   const inner = (
     <>
       {children}
@@ -51,8 +53,8 @@ export function Button({ to, href, children, variant = "primary", arrow = false,
 // A clearly marked spot for a real church photo, to be swapped in later.
 export function PhotoSlot({ label, className = "", dark = false }) {
   return (
-    <div role="img" aria-label={`Photo coming soon: ${label}`} className={`relative overflow-hidden ${dark ? "bg-slate-800" : "bg-slate-200"} ${className}`}>
-      <div className={`absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-medium ${dark ? "bg-black/30 text-white/70" : "bg-white/80 text-slate-500"}`}>
+    <div role="img" aria-label={`Photo coming soon: ${label}`} className={`relative overflow-hidden ${dark ? "bg-ink-soft" : "bg-paper-deep"} ${className}`}>
+      <div className={`absolute bottom-4 left-4 inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] ${dark ? "bg-black/40 text-white/70" : "bg-white text-stone-500"}`}>
         <ImageIcon className="w-3.5 h-3.5" aria-hidden="true" />
         Photo: {label}
       </div>
@@ -60,18 +62,36 @@ export function PhotoSlot({ label, className = "", dark = false }) {
   );
 }
 
-// Page header used at the top of every inner page
-export function PageHero({ title, text, photo }) {
+// Top of an inner page: bold headline on white, like the worship site's plain page hero.
+export function PageHero({ eyebrow, lines, intro, children }) {
   return (
-    <section className="relative overflow-hidden bg-slate-950">
-      <PhotoSlot label={photo} dark className="absolute inset-0" />
-      <div className="absolute inset-0 bg-slate-950/55" />
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-28 pb-20 md:pt-40 md:pb-24">
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }} className="max-w-3xl">
-          <h1 className="text-4xl sm:text-6xl font-bold text-white tracking-tighter leading-[1.05]">{title}</h1>
-          {text && <p className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl">{text}</p>}
-        </motion.div>
-      </div>
+    <section className="bg-white border-b border-ink/10">
+      <Container className="pt-[140px] md:pt-[170px] pb-14 md:pb-20">
+        {eyebrow && (
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 0.1 }} className="text-[12px] font-bold uppercase tracking-[0.22em] mb-6 text-oxblood">
+            {eyebrow}
+          </motion.p>
+        )}
+        <h1 className="headline text-[56px] sm:text-[92px] lg:text-[124px]">
+          {lines.map((line, i) => <MaskLine key={i} delay={0.15 + i * 0.1}>{line}</MaskLine>)}
+        </h1>
+        {(intro || children) && (
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.35 + lines.length * 0.1, ease: EASE }}
+            className="mt-8 md:mt-10 grid lg:grid-cols-12 gap-8 items-end"
+          >
+            {intro && <p className="lg:col-span-6 text-[17px] md:text-[19px] leading-[1.6] max-w-[38rem] text-stone-600">{intro}</p>}
+            {children && <div className="lg:col-span-6 lg:justify-self-end flex flex-wrap gap-3">{children}</div>}
+          </motion.div>
+        )}
+      </Container>
     </section>
   );
+}
+
+// Section heading in the worship site's style
+export function H2({ children, className = "", light = false }) {
+  return <h2 className={`headline text-[48px] sm:text-[72px] lg:text-[88px] ${light ? "text-white" : ""} ${className}`}>{children}</h2>;
 }

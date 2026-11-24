@@ -1,5 +1,8 @@
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { events, weekly } from "../data/church";
-import { Button, PageHero, PhotoSlot } from "../components/ui";
+import { Container, PageHero, rise } from "../components/ui";
 import { formatDate } from "../lib/dates";
 
 export default function Events() {
@@ -10,54 +13,57 @@ export default function Events() {
   return (
     <>
       <PageHero
-        title="Events at House of Prayer"
-        text="Sunday services, holiday services and church gatherings. Everyone is welcome at every event."
-        photo="A church event in the Family Life Center"
+        eyebrow="Events"
+        lines={["What's", <span key="a" className="accent text-oxblood">next.</span>]}
+        intro="Sunday services, holiday services and church gatherings. Everyone is welcome at every event."
       />
 
-      <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">Upcoming events</h2>
-            <PhotoSlot label="Christmas service" className="hidden lg:block rounded-2xl aspect-[4/5]" />
-          </div>
-          <div className="lg:col-span-8 border-t border-slate-200">
-            {upcoming.length === 0 && <p className="py-6 text-slate-600">New events will be posted here.</p>}
-            {upcoming.map((e) => {
+      <section className="py-24 md:py-36">
+        <Container>
+          {upcoming.length === 0 && <p className="text-stone-600">New events will be posted here.</p>}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {upcoming.map((e, i) => {
               const d = formatDate(e.date);
               return (
-                <article key={e.title + e.date} className="py-8 border-b border-slate-200 grid grid-cols-[5.5rem_1fr] gap-6">
-                  <div>
-                    <p className="text-xs font-bold tracking-widest text-brand">{d.month}</p>
-                    <p className="text-5xl font-bold tracking-tighter leading-none mt-1">{d.day}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold tracking-tight">{e.title}</h3>
-                    <p className="text-slate-500 mt-1">{d.weekday}, {e.time}</p>
-                    <p className="text-slate-600 leading-relaxed mt-3">{e.text}</p>
-                  </div>
-                </article>
+                <motion.article key={e.title + e.date} {...rise(i * 0.08)} className="group border-2 border-ink p-8 transition-colors hover:bg-ink hover:text-white">
+                  <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-oxblood">{d.weekday}</p>
+                  <p className="headline text-[96px] leading-[0.85] mt-3">{d.day}</p>
+                  <p className="headline text-[28px] text-stone-500 group-hover:text-white/60">{d.month}</p>
+                  <h2 className="headline text-[40px] mt-8">{e.title}</h2>
+                  <p className="mt-2 font-semibold">{e.time}</p>
+                  <p className="mt-4 text-[16px] leading-[1.6] text-stone-600 group-hover:text-white/75">{e.text}</p>
+                </motion.article>
               );
             })}
           </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-8">Every week</h2>
-            <Button to="/plan-your-visit" arrow>Plan Your Visit</Button>
+      <section className="bg-paper-deep py-24 md:py-36">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-14">
+            <div className="lg:col-span-5">
+              <motion.h2 {...rise()} className="headline text-[56px] sm:text-[80px]">Every <span className="accent text-oxblood">week.</span></motion.h2>
+              <motion.div {...rise(0.1)} className="mt-10">
+                <Link to="/plan-your-visit" className="btn-red">Plan your visit <ArrowRight className="w-4 h-4" /></Link>
+              </motion.div>
+            </div>
+            <motion.div {...rise(0.1)} className="lg:col-span-7">
+              <table className="w-full text-left">
+                <caption className="sr-only">Weekly services</caption>
+                <tbody>
+                  {weekly.map((row) => (
+                    <tr key={row.day + row.time} className="border-t border-ink/15 first:border-t-2 first:border-ink last:border-b">
+                      <th scope="row" className="py-5 pr-4 font-normal w-[26%]"><span className="headline text-[34px] md:text-[40px]">{row.day.slice(0, 3)}</span></th>
+                      <td className="py-5 pr-4 text-[15px] font-semibold tabular-nums text-oxblood w-[26%] whitespace-nowrap">{row.time}</td>
+                      <td className="py-5 text-[16px] md:text-[17px]">{row.title}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>
           </div>
-          <div className="lg:col-span-8 border-t border-slate-200">
-            {weekly.map((w) => (
-              <div key={w.day + w.time} className="py-6 border-b border-slate-200 flex justify-between gap-6">
-                <p className="text-lg font-bold tracking-tight">{w.title} <span className="font-normal text-slate-500">{w.day}</span></p>
-                <p className="text-lg font-bold text-brand">{w.time}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        </Container>
       </section>
     </>
   );
