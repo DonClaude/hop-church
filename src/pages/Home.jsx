@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div className="bg-white text-ink">
       {/* ── Hero ── */}
-      <section className="relative min-h-[640px] h-[100svh] max-h-[1100px] flex flex-col overflow-hidden bg-ink-night text-white">
+      <section className="relative min-h-[560px] h-[100svh] flex flex-col overflow-hidden bg-ink-night text-white">
         <HeroVideo />
         <div className="absolute inset-0 bg-black/50" />
 
@@ -47,7 +47,7 @@ export default function Home() {
           </motion.p>
         </div>
 
-        <div className="relative w-full max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 pb-6 sm:pb-8 flex flex-wrap justify-between gap-x-6 gap-y-2 font-sans font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[12px] text-white/80">
+        <div className="relative w-full px-5 sm:px-8 lg:px-12 pb-6 sm:pb-8 flex flex-wrap justify-between gap-x-6 gap-y-2 font-sans font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[12px] text-white/80">
           <span>Sundays 9:00 + 11:15 AM</span>
           <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white">1245 Thomaston Avenue</a>
         </div>

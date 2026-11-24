@@ -78,7 +78,7 @@ export default function Layout({ children }) {
           overPhoto ? "bg-transparent text-white border-transparent" : "bg-white text-ink border-ink/10"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="px-5 sm:px-8 lg:px-12">
           <div className="flex items-center justify-between h-[84px]">
             <Logo light={overPhoto} />
             <button
@@ -110,13 +110,13 @@ export default function Layout({ children }) {
             transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-[70] bg-white text-ink flex flex-col overflow-y-auto font-modern"
           >
-            <div className="w-full max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-[84px] flex-shrink-0">
+            <div className="w-full px-5 sm:px-8 lg:px-12 flex items-center justify-between h-[84px] flex-shrink-0">
               <Logo onClick={() => setOpen(false)} />
               <button ref={closeBtn} onClick={() => setOpen(false)} className="-mr-2 w-12 h-12 flex items-center justify-center" aria-label="Close menu">
                 <svg aria-hidden="true" width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 2l16 16M18 2L2 18" /></svg>
               </button>
             </div>
-            <nav className="flex-1 w-full max-w-[1400px] mx-auto flex flex-col justify-center px-5 sm:px-8 lg:px-12 py-6" aria-label="Main">
+            <nav className="flex-1 w-full flex flex-col justify-center px-5 sm:px-8 lg:px-12 py-6" aria-label="Main">
               {menu.map((item, i) => (
                 <motion.div
                   key={item.to}
@@ -138,7 +138,7 @@ export default function Layout({ children }) {
                 </motion.div>
               ))}
             </nav>
-            <div className="border-t border-ink/10"><div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 py-6 flex flex-wrap justify-between gap-x-8 gap-y-3 font-sans font-bold uppercase tracking-[0.3em] text-[11px] sm:text-[12px] text-stone-600">
+            <div className="border-t border-ink/10"><div className="px-5 sm:px-8 lg:px-12 py-6 flex flex-wrap justify-between gap-x-8 gap-y-3 font-sans font-bold uppercase tracking-[0.3em] text-[11px] sm:text-[12px] text-stone-600">
               <span>Sundays 9:00 + 11:15 AM</span>
               <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-ink">1245 Thomaston Avenue, Waterbury</a>
               <a href={church.phoneHref} className="hover:text-ink">{church.phone}</a>
