@@ -32,7 +32,7 @@ npm run dev
 3. Optional: add the environment variable `VITE_FORM_ENDPOINT` (see Forms below).
 4. Deploy, then add the custom domain under **Custom domains**.
 
-`public/_redirects` sends every path to the app, so links like `/about` work when opened directly.
+Cloudflare Pages serves the app for every path automatically, so links like `/about` work when opened directly.
 
 ## Where to change things
 
