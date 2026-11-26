@@ -4,3 +4,4 @@ dist
 .DS_Store
 .taste-skill
 dist-ssr
+.wrangler
