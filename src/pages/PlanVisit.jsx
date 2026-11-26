@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ArrowUpRight, Plus, Minus } from "lucide-react";
@@ -49,7 +49,9 @@ function VisitForm() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [service, setService] = useState(church.services[0].time);
-  const sundays = nextSundays();
+  // Worked out in the visitor's browser so the dates are always current (the page itself is built ahead of time).
+  const [sundays, setSundays] = useState([]);
+  useEffect(() => setSundays(nextSundays()), []);
 
   async function onSubmit(e) {
     e.preventDefault();

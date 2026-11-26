@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { church, LOGO_URL } from "../data/church";
+import { metaFor } from "../seo";
 
 const menu = [
   { label: "I'm new", to: "/plan-your-visit", red: true },
@@ -43,6 +44,9 @@ export default function Layout({ children }) {
   useEffect(() => {
     setOpen(false);
     window.scrollTo(0, 0);
+    const meta = metaFor(pathname);
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
   }, [pathname]);
 
   const openBtn = useRef(null);
